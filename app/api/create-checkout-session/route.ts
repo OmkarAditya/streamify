@@ -19,24 +19,24 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
 
     const customer = await createOrRetrieveCustomer({
-      uuid: user?.id || "",
-      email: user?.email || "",
+      uuid: user?.id || '',
+      email: user?.email || '',
     });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      billing_address_collection: "required",
+      billing_address_collection: 'required',
       customer,
       line_items: [
         {
           price: price.id,
           quantity,
-        },
+        }
       ],
       mode: 'subscription',
       allow_promotion_codes: true,
       subscription_data: {
-        trial_from_plan: true,
+        // trial_from_plan: true,
         metadata,
       },
       success_url: `${getURL()}/account`,
